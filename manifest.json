@@ -1,9 +1,0 @@
-{
-  "background_color": "#ffffff",
-  "display": "standalone",
-  "lang": "en",
-  "name": "91 Express Lane Toll Fee",
-  "short_name": "91 Express Lane Toll Fee",
-  "start_url": "/?utm_source=web_app_manifest",
-  "orientation": "portrait"
-}
