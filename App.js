@@ -75,32 +75,32 @@ export default function App() {
 
   const data = [
     {
-      title: "Orange County ⬅️ Green River Rd",
+      title: "SR-55 ⬅️ County Line",
       data: westboundOCData,
       eastbound: false,
     },
     {
-      title: "Orange County ➡️ Green River Rd",
+      title: "SR-55 ➡️ County Line",
       data: eastboundOCData,
       eastbound: true,
     },
     {
-      title: "Green River Rd ⬅️ McKinley",
+      title: "County Line ⬅️ McKinley St",
       data: westboundMcKinleyData,
       eastbound: false,
     },
     {
-      title: "Green River Rd ➡️ McKinley",
+      title: "County Line ➡️ McKinley St",
       data: eastboundMcKinleyData,
       eastbound: true,
     },
     {
-      title: "Green River Rd ⬅️ I-15",
+      title: "County Line ⬅️ I-15",
       data: westboundI15Data,
       eastbound: false,
     },
     {
-      title: "Green River Rd ➡️ I-15",
+      title: "County Line ➡️ I-15",
       data: eastboundI15Data,
       eastbound: true,
     },
