@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   label: {
-    fontSize: 14,
+    fontSize: 12,
   },
   holidayRate: {
     fontStyle: "italic",
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   tollAmount: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     fontStyle: "italic",
   },

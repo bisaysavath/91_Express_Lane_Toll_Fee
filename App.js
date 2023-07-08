@@ -139,6 +139,9 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: statusBarHeight,
   },
+  scrollViewContainer: {
+    paddingBottom: 20,
+  },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "center",

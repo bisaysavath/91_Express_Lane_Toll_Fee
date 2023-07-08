@@ -52,13 +52,23 @@ export default function Card({
       currentTollAmount = { time, tollAmount, hov3PlusLaneAmount, isHoliday };
     } else {
       futureTollAmounts.push(
-        <FutureTollAmount
-          key={time}
-          time={time}
-          regPrice={tollAmount}
-          hov3Price={hov3PlusLaneAmount}
-          isHoliday={isHoliday}
-        />
+        <>
+          <FutureTollAmount
+            key={time}
+            time={time}
+            regPrice={tollAmount}
+            hov3Price={hov3PlusLaneAmount}
+            isHoliday={isHoliday}
+          />
+          {i !== numberOfFutureHours - 1 && (
+            <View
+              style={{
+                borderLeftColor: "#737373",
+                borderLeftWidth: StyleSheet.hairlineWidth,
+              }}
+            ></View>
+          )}
+        </>
       );
     }
   }
@@ -67,6 +77,9 @@ export default function Card({
     <View style={styles.card}>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.currentTollContainer}>
+        <Text style={{ alignSelf: "center", fontStyle: "italic" }}>
+          {new Date().toDateString()}
+        </Text>
         <Text style={styles.time}>{currentTollAmount.time}</Text>
         <View style={styles.currentTollAmountGroup}>
           <View style={styles.currentTollAmountContainer}>
@@ -92,8 +105,7 @@ export default function Card({
                     }}
                   >
                     <Text>
-                      Carpool with 3+ people and active FastTrak transponder
-                      required.
+                      Carpools of 3+ with active FastTrak transponder required
                     </Text>
                   </View>
                 }
@@ -139,9 +151,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   currentTollContainer: {
-    marginVertical: 15,
-    marginBottom: 0,
-    gap: 5,
+    marginVertical: 20,
+    // gap: 10,
   },
   currentTollAmount: {
     fontSize: 40,
@@ -161,6 +172,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: 30,
     fontWeight: "bold",
+    marginBottom: 30,
   },
   futureAmount: {
     flex: 1,
