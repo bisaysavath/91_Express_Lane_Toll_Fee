@@ -119,16 +119,18 @@ export default function App() {
           <StateRouteNinetyOneSvg />
           <Text style={styles.headerText}>Express Lanes Toll Fee</Text>
         </View>
-        {data.map((d) => (
-          <Card
-            key={d.title}
-            title={d.title}
-            priceData={d.data}
-            currentDay={currentDay}
-            currentHour={currentHour}
-            eastbound={d.eastbound}
-          />
-        ))}
+        <View style={styles.cardContainer}>
+          {data.map((d) => (
+            <Card
+              key={d.title}
+              title={d.title}
+              priceData={d.data}
+              currentDay={currentDay}
+              currentHour={currentHour}
+              eastbound={d.eastbound}
+            />
+          ))}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -141,6 +143,11 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     paddingBottom: 20,
+  },
+  cardContainer: {
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   headerContainer: {
     flexDirection: "row",

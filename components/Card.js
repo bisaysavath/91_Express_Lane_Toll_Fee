@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import React, { Fragment } from "react";
+import { StyleSheet, View, Text, useWindowDimensions } from "react-native";
 import FutureTollAmount from "./FutureTollAmount";
 import { convertHourCodeToClockHour, roundCurrency } from "../utils/helper";
 import { Popable } from "react-native-popable";
@@ -12,6 +12,13 @@ export default function Card({
   currentDay,
   eastbound = false,
 }) {
+  const layout = useWindowDimensions();
+
+  let targetWidth = 600;
+  if (layout.width < 768) {
+    targetWidth = layout.width * 0.95;
+  }
+
   let currentTollAmount = {};
   const futureTollAmounts = [];
   const numberOfFutureHours = 4;
@@ -52,15 +59,14 @@ export default function Card({
       currentTollAmount = { time, tollAmount, hov3PlusLaneAmount, isHoliday };
     } else {
       futureTollAmounts.push(
-        <>
+        <Fragment key={time}>
           <FutureTollAmount
-            key={time}
             time={time}
             regPrice={tollAmount}
             hov3Price={hov3PlusLaneAmount}
             isHoliday={isHoliday}
           />
-          {i !== numberOfFutureHours - 1 && (
+          {i < numberOfFutureHours - 1 && (
             <View
               style={{
                 borderLeftColor: "#737373",
@@ -68,13 +74,13 @@ export default function Card({
               }}
             ></View>
           )}
-        </>
+        </Fragment>
       );
     }
   }
 
   return (
-    <View style={styles.card}>
+    <View style={{ ...styles.card, width: targetWidth }}>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.currentTollContainer}>
         <Text style={{ alignSelf: "center", fontStyle: "italic" }}>
@@ -152,7 +158,6 @@ const styles = StyleSheet.create({
   },
   currentTollContainer: {
     marginVertical: 20,
-    // gap: 10,
   },
   currentTollAmount: {
     fontSize: 40,
@@ -160,7 +165,6 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
   currentTollAmountGroup: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -175,7 +179,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   futureAmount: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: "space-evenly",
   },
