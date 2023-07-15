@@ -5,13 +5,7 @@ import { convertHourCodeToClockHour, roundCurrency } from "../utils/helper";
 import { Popable } from "react-native-popable";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-export default function Card({
-  title,
-  priceData,
-  currentHour,
-  currentDay,
-  eastbound = false,
-}) {
+export default function Card({ title, currentDate, data }) {
   const layout = useWindowDimensions();
 
   let targetWidth = 600;
@@ -21,52 +15,22 @@ export default function Card({
 
   let currentTollAmount = {};
   const futureTollAmounts = [];
-  const numberOfFutureHours = 4;
-  const maxHours = 24;
-  const daysInWeek = 7;
 
-  for (let i = 0; i < numberOfFutureHours; i++) {
-    if (currentHour + 1 >= maxHours) {
-      currentDay++;
-    }
-    let hov3DiscountPercentage = 100;
-
-    const adjustedDay = currentDay % daysInWeek;
-    const adjustedHour = (currentHour + i) % maxHours;
-
-    if (
-      eastbound &&
-      adjustedDay >= 1 &&
-      adjustedDay <= 5 &&
-      adjustedHour >= 16 &&
-      adjustedHour <= 18
-    ) {
-      // between Mon and Fri 4-6 pm
-      hov3DiscountPercentage = 50;
-    }
-
-    const time = convertHourCodeToClockHour(adjustedHour);
-    let tollAmount = priceData[adjustedHour][adjustedDay];
-
-    let isHoliday = false;
-    if (typeof tollAmount === "string") {
-      isHoliday = true;
-      tollAmount = parseFloat(tollAmount.replace("*", ""));
-    }
-    const hov3PlusLaneAmount =
-      tollAmount - tollAmount * (hov3DiscountPercentage / 100);
-    if (i === 0) {
-      currentTollAmount = { time, tollAmount, hov3PlusLaneAmount, isHoliday };
+  for (let index = 0; index < data.length; index++) {
+    const { hour, price, hov3Price, isHoliday } = data[index];
+    const time = convertHourCodeToClockHour(hour);
+    if (index === 0) {
+      currentTollAmount = { time, price, hov3Price, isHoliday };
     } else {
       futureTollAmounts.push(
         <Fragment key={time}>
           <FutureTollAmount
             time={time}
-            regPrice={tollAmount}
-            hov3Price={hov3PlusLaneAmount}
+            regPrice={price}
+            hov3Price={hov3Price}
             isHoliday={isHoliday}
           />
-          {i < numberOfFutureHours - 1 && (
+          {index < data.length - 1 && (
             <View
               style={{
                 borderLeftColor: "#737373",
@@ -84,14 +48,14 @@ export default function Card({
       <Text style={styles.title}>{title}</Text>
       <View style={styles.currentTollContainer}>
         <Text style={{ alignSelf: "center", fontStyle: "italic" }}>
-          {new Date().toDateString()}
+          {currentDate.toDateString()}
         </Text>
         <Text style={styles.time}>{currentTollAmount.time}</Text>
         <View style={styles.currentTollAmountGroup}>
           <View style={styles.currentTollAmountContainer}>
             <Text>Regular Lane:</Text>
             <Text style={styles.currentTollAmount}>
-              ${roundCurrency(currentTollAmount.tollAmount)}
+              ${roundCurrency(currentTollAmount.price)}
             </Text>
             {currentTollAmount.isHoliday && (
               <Text style={styles.holidayRate}>*holiday rate</Text>
@@ -122,9 +86,9 @@ export default function Card({
               :
             </Text>
             <Text style={styles.currentTollAmount}>
-              {currentTollAmount.hov3PlusLaneAmount === 0
+              {currentTollAmount.hov3Price === 0
                 ? "FREE"
-                : "$" + roundCurrency(currentTollAmount.hov3PlusLaneAmount)}
+                : "$" + roundCurrency(currentTollAmount.hov3Price)}
             </Text>
             {currentTollAmount.isHoliday && (
               <Text style={styles.holidayRate}>*holiday rate</Text>
