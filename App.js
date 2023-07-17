@@ -33,34 +33,50 @@ const getHolidayData = (data, date) =>
   );
 
 const getPriceData = (priceData, holidayPriceData, date, eastbound = false) => {
-  const currentDay = date.getDay();
-  const currentHour = date.getHours();
+  const priceList = [];
+  for (let i = 0; i < 4; i++) {
+    const newDate = new Date(date.toISOString());
+    newDate.setHours(newDate.getHours() + i);
+    const currentDay = newDate.getDay();
+    const currentHour = newDate.getHours();
 
-  // get regular price and account for holiday price
-  const holidayData = getHolidayData(holidayPriceData, date);
-  let price = 0;
-  let isHoliday = false;
-  if (holidayData) {
-    isHoliday = true;
-    const boundData = eastbound ? holidayData.eastbound : holidayData.westbound;
-    price = boundData[currentHour];
-  } else {
-    price = priceData[currentHour][currentDay];
+    // get regular price and account for holiday price
+    const holidayData = getHolidayData(holidayPriceData, newDate);
+    let price = 0;
+    let isHoliday = false;
+    if (holidayData) {
+      isHoliday = true;
+      const boundData = eastbound
+        ? holidayData.eastbound
+        : holidayData.westbound;
+      price = boundData[currentHour];
+    } else {
+      price = priceData[currentHour][currentDay];
+    }
+
+    // calculate hov3+ lane toll amount
+    let hov3Price = 0;
+    if (
+      // toll is 50% between Mon-Fri 4pm - 6pm
+      eastbound &&
+      currentDay > 0 &&
+      currentDay < 7 &&
+      currentHour > 15 &&
+      currentHour < 19
+    ) {
+      hov3Price = price - price * 0.5;
+    }
+
+    priceList.push({
+      day: currentDay,
+      hour: currentHour,
+      price,
+      hov3Price,
+      isHoliday,
+    });
   }
 
-  // calculate hov3+ lane toll amount
-  let hov3Price = 0;
-  if (
-    eastbound &&
-    currentDay > 0 &&
-    currentDay < 7 &&
-    currentHour > 15 &&
-    currentHour < 19
-  ) {
-    hov3Price = price - price * 0.5;
-  }
-
-  return { day: currentDay, hour: currentHour, price, hov3Price, isHoliday };
+  return priceList;
 };
 
 export default function App() {
@@ -96,99 +112,40 @@ export default function App() {
     {
       title: "SR-55 ⬅️ County Line",
       currentDate: currentDate,
-      data: [
-        getPriceData(westboundOCData, holidaysOCData, currentDate),
-        getPriceData(westboundOCData, holidaysOCData, nextHourDate),
-        getPriceData(westboundOCData, holidaysOCData, nextTwoHoursDate),
-        getPriceData(westboundOCData, holidaysOCData, nextThreeHoursDate),
-      ],
+      data: getPriceData(westboundOCData, holidaysOCData, currentDate),
     },
     {
       title: "SR-55 ➡️ County Line",
       currentDate: currentDate,
-      data: [
-        getPriceData(eastboundOCData, holidaysOCData, currentDate, true),
-        getPriceData(eastboundOCData, holidaysOCData, nextHourDate, true),
-        getPriceData(eastboundOCData, holidaysOCData, nextTwoHoursDate, true),
-        getPriceData(eastboundOCData, holidaysOCData, nextThreeHoursDate, true),
-      ],
+      data: getPriceData(eastboundOCData, holidaysOCData, currentDate, true),
     },
     {
       title: "County Line ⬅️ McKinley St",
       currentDate: currentDate,
-      data: [
-        getPriceData(westboundMcKinleyData, holidaysRMcKinleyData, currentDate),
-        getPriceData(
-          westboundMcKinleyData,
-          holidaysRMcKinleyData,
-          nextHourDate
-        ),
-        getPriceData(
-          westboundMcKinleyData,
-          holidaysRMcKinleyData,
-          nextTwoHoursDate
-        ),
-        getPriceData(
-          westboundMcKinleyData,
-          holidaysRMcKinleyData,
-          nextThreeHoursDate
-        ),
-      ],
+      data: getPriceData(
+        westboundMcKinleyData,
+        holidaysRMcKinleyData,
+        currentDate
+      ),
     },
     {
       title: "County Line ➡️ McKinley St",
       currentDate: currentDate,
-      data: [
-        getPriceData(eastboundMcKinleyData, holidaysRMcKinleyData, currentDate),
-        getPriceData(
-          eastboundMcKinleyData,
-          holidaysRMcKinleyData,
-          nextHourDate,
-          true
-        ),
-        getPriceData(
-          eastboundMcKinleyData,
-          holidaysRMcKinleyData,
-          nextTwoHoursDate,
-          true
-        ),
-        getPriceData(
-          eastboundMcKinleyData,
-          holidaysRMcKinleyData,
-          nextThreeHoursDate,
-          true
-        ),
-      ],
+      data: getPriceData(
+        eastboundMcKinleyData,
+        holidaysRMcKinleyData,
+        currentDate
+      ),
     },
     {
       title: "County Line ⬅️ I-15",
       currentDate: currentDate,
-      data: [
-        getPriceData(westboundI15Data, holidaysRI15Data, currentDate),
-        getPriceData(westboundI15Data, holidaysRI15Data, nextHourDate),
-        getPriceData(westboundI15Data, holidaysRI15Data, nextTwoHoursDate),
-        getPriceData(westboundI15Data, holidaysRI15Data, nextThreeHoursDate),
-      ],
+      data: getPriceData(westboundI15Data, holidaysRI15Data, currentDate),
     },
     {
       title: "County Line ➡️ I-15",
       currentDate: currentDate,
-      data: [
-        getPriceData(eastboundI15Data, holidaysRI15Data, currentDate, true),
-        getPriceData(eastboundI15Data, holidaysRI15Data, nextHourDate, true),
-        getPriceData(
-          eastboundI15Data,
-          holidaysRI15Data,
-          nextTwoHoursDate,
-          true
-        ),
-        getPriceData(
-          eastboundI15Data,
-          holidaysRI15Data,
-          nextThreeHoursDate,
-          true
-        ),
-      ],
+      data: getPriceData(eastboundI15Data, holidaysRI15Data, currentDate, true),
     },
   ];
 
