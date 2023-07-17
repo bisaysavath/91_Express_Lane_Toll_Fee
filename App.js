@@ -24,6 +24,7 @@ import westboundMcKinleyData from "./assets/data/westboundMcKinley.json";
 import eastboundMcKinleyData from "./assets/data/eastboundMcKinley.json";
 import holidaysRMcKinleyData from "./assets/data/holidaysRMcKinley.json";
 import holidaysRI15Data from "./assets/data/holidaysRI15.json";
+import scheduledClosures from "./assets/data/scheduledClosures.json";
 
 const getHolidayData = (data, date) =>
   data.find(
@@ -35,6 +36,7 @@ const getPriceData = (priceData, holidayPriceData, date, eastbound = false) => {
   const currentDay = date.getDay();
   const currentHour = date.getHours();
 
+  // get regular price and account for holiday price
   const holidayData = getHolidayData(holidayPriceData, date);
   let price = 0;
   let isHoliday = false;
@@ -46,6 +48,7 @@ const getPriceData = (priceData, holidayPriceData, date, eastbound = false) => {
     price = priceData[currentHour][currentDay];
   }
 
+  // calculate hov3+ lane toll amount
   let hov3Price = 0;
   if (
     eastbound &&
@@ -63,6 +66,14 @@ const getPriceData = (priceData, holidayPriceData, date, eastbound = false) => {
 export default function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [refreshing, setRefreshing] = useState(false);
+
+  // check if this week will have a scheduled maintenance closure on Sunday
+  const isScheduledClosureSundayWeek = scheduledClosures.find((val) => {
+    const valTime = new Date(val).getTime();
+    const timeDiff = valTime - currentDate.getTime();
+    // 561600000ms is the diff between 0 AM Monday to 12 PM Sunday
+    return timeDiff >= 0 && timeDiff <= 561600000;
+  });
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -183,9 +194,19 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
+      {isScheduledClosureSundayWeek && (
+        <View style={styles.stickyBanner}>
+          <Text style={styles.bannerText}>
+            Scheduled Maintenance This Sunday 6 AM - 12 PM
+          </Text>
+        </View>
+      )}
       <ScrollView
         horizontal={false}
-        style={styles.scrollViewContainer}
+        style={{
+          ...styles.scrollViewContainer,
+          marginTop: isScheduledClosureSundayWeek ? 10 : 0,
+        }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -213,6 +234,20 @@ const styles = StyleSheet.create({
   safeAreaViewContainer: {
     flex: 1,
     marginTop: statusBarHeight,
+  },
+  stickyBanner: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: 25,
+    marginBottom: 5,
+    position: "fixed",
+    backgroundColor: "#dd062d",
+    zIndex: 5,
+  },
+  bannerText: {
+    fontWeight: "bold",
+    color: "white",
   },
   scrollViewContainer: {
     paddingBottom: 15,
