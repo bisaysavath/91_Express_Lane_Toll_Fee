@@ -134,7 +134,8 @@ export default function App() {
       data: getPriceData(
         eastboundMcKinleyData,
         holidaysRMcKinleyData,
-        currentDate
+        currentDate,
+        true
       ),
     },
     {
