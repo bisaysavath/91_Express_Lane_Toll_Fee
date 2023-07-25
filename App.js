@@ -155,7 +155,7 @@ export default function App() {
       {isScheduledClosureSundayWeek && (
         <View style={styles.stickyBanner}>
           <Text style={styles.bannerText}>
-            Scheduled Maintenance This Sunday 6 AM - 12 PM
+            Scheduled Closure this Sunday 6am - 12pm
           </Text>
         </View>
       )}
