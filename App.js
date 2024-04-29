@@ -42,7 +42,7 @@ const getPriceData = (priceData, holidayPriceData, date, eastbound = false) => {
 
     // get regular price and account for holiday price
     const holidayData = getHolidayData(holidayPriceData, newDate);
-    let price = 0;
+    let price = undefined;
     let isHoliday = false;
     if (holidayData) {
       isHoliday = true;
@@ -50,7 +50,9 @@ const getPriceData = (priceData, holidayPriceData, date, eastbound = false) => {
         ? holidayData.eastbound
         : holidayData.westbound;
       price = boundData[currentHour];
-    } else {
+    }
+
+    if (!price) {
       price = priceData[currentHour][currentDay];
     }
 
@@ -164,7 +166,7 @@ export default function App() {
       {isScheduledClosureSundayWeek && (
         <View style={styles.stickyBanner}>
           <Text style={styles.bannerText}>
-            Scheduled Maintenance This Sunday 6 AM - 12 PM
+            Scheduled Closure this Sunday 6am - 12pm
           </Text>
         </View>
       )}
