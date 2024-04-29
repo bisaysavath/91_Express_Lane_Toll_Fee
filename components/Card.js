@@ -5,7 +5,7 @@ import { convertHourCodeToClockHour, roundCurrency } from "../utils/helper";
 import { Popable } from "react-native-popable";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-export default function Card({ title, currentDate, data }) {
+export default function Card({ title, currentDate, data, dynamic }) {
   const layout = useWindowDimensions();
 
   let targetWidth = 600;
@@ -16,30 +16,39 @@ export default function Card({ title, currentDate, data }) {
   let currentTollAmount = {};
   const futureTollAmounts = [];
 
-  for (let index = 0; index < data.length; index++) {
-    const { hour, price, hov3Price, isHoliday } = data[index];
-    const time = convertHourCodeToClockHour(hour);
-    if (index === 0) {
-      currentTollAmount = { time, price, hov3Price, isHoliday };
-    } else {
-      futureTollAmounts.push(
-        <Fragment key={time}>
-          <FutureTollAmount
-            time={time}
-            regPrice={price}
-            hov3Price={hov3Price}
-            isHoliday={isHoliday}
-          />
-          {index < data.length - 1 && (
-            <View
-              style={{
-                borderLeftColor: "#737373",
-                borderLeftWidth: StyleSheet.hairlineWidth,
-              }}
-            ></View>
-          )}
-        </Fragment>
-      );
+  if (dynamic) {
+    currentTollAmount = {
+      time: convertHourCodeToClockHour(new Date().getHours()),
+      price: data,
+      hov3Price: data,
+      isHoliday: false,
+    };
+  } else {
+    for (let index = 0; index < data.length; index++) {
+      const { hour, price, hov3Price, isHoliday } = data[index];
+      const time = convertHourCodeToClockHour(hour);
+      if (index === 0) {
+        currentTollAmount = { time, price, hov3Price, isHoliday };
+      } else {
+        futureTollAmounts.push(
+          <Fragment key={time}>
+            <FutureTollAmount
+              time={time}
+              regPrice={price}
+              hov3Price={hov3Price}
+              isHoliday={isHoliday}
+            />
+            {index < data.length - 1 && (
+              <View
+                style={{
+                  borderLeftColor: "#737373",
+                  borderLeftWidth: StyleSheet.hairlineWidth,
+                }}
+              ></View>
+            )}
+          </Fragment>
+        );
+      }
     }
   }
 
@@ -54,8 +63,9 @@ export default function Card({ title, currentDate, data }) {
         <View style={styles.currentTollAmountGroup}>
           <View style={styles.currentTollAmountContainer}>
             <Text>Regular Lane:</Text>
+            {dynamic && <Text>(dynamic pricing w/ min. below)</Text>}
             <Text style={styles.currentTollAmount}>
-              ${roundCurrency(currentTollAmount.price)}
+              $ {roundCurrency(currentTollAmount.price)}
             </Text>
             {currentTollAmount.isHoliday && (
               <Text style={styles.holidayRate}>*holiday rate</Text>
@@ -85,8 +95,11 @@ export default function Card({ title, currentDate, data }) {
               </Popable>
               :
             </Text>
+            {dynamic && <Text> </Text>}
             <Text style={styles.currentTollAmount}>
-              {currentTollAmount.hov3Price === 0
+              {dynamic
+                ? "TBD"
+                : currentTollAmount.hov3Price === 0
                 ? "FREE"
                 : "$" + roundCurrency(currentTollAmount.hov3Price)}
             </Text>

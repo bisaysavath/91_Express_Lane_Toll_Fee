@@ -113,39 +113,49 @@ export default function App() {
       title: "SR-55 ⬅️ County Line",
       currentDate: currentDate,
       data: getPriceData(westboundOCData, holidaysOCData, currentDate),
+      dynamic: false,
     },
     {
       title: "SR-55 ➡️ County Line",
       currentDate: currentDate,
       data: getPriceData(eastboundOCData, holidaysOCData, currentDate, true),
+      dynamic: false,
     },
     {
       title: "County Line ⬅️ McKinley St",
       currentDate: currentDate,
-      data: getPriceData(
-        westboundMcKinleyData,
-        holidaysRMcKinleyData,
-        currentDate
-      ),
+      data: 1.85,
+      dynamic: true,
     },
     {
       title: "County Line ➡️ McKinley St",
       currentDate: currentDate,
-      data: getPriceData(
-        eastboundMcKinleyData,
-        holidaysRMcKinleyData,
-        currentDate
-      ),
+      data: 2.05,
+      dynamic: true,
     },
     {
-      title: "County Line ⬅️ I-15",
+      title: "County Line ⬅️ I-15 North",
       currentDate: currentDate,
-      data: getPriceData(westboundI15Data, holidaysRI15Data, currentDate),
+      data: 3.0,
+      dynamic: true,
     },
     {
-      title: "County Line ➡️ I-15",
+      title: "County Line ➡️ I-15 North",
       currentDate: currentDate,
-      data: getPriceData(eastboundI15Data, holidaysRI15Data, currentDate, true),
+      data: 3.05,
+      dynamic: true,
+    },
+    {
+      title: "County Line ⬅️ I-15 South",
+      currentDate: currentDate,
+      data: 2.1,
+      dynamic: true,
+    },
+    {
+      title: "County Line ➡️ I-15 South",
+      currentDate: currentDate,
+      data: 2.3,
+      dynamic: true,
     },
   ];
 
@@ -179,6 +189,7 @@ export default function App() {
               title={d.title}
               currentDate={d.currentDate}
               data={d.data}
+              dynamic={d.dynamic}
             />
           ))}
         </View>
