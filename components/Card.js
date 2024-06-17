@@ -63,7 +63,7 @@ export default function Card({ title, currentDate, data, dynamic }) {
         <View style={styles.currentTollAmountGroup}>
           <View style={styles.currentTollAmountContainer}>
             <Text>Regular Lane:</Text>
-            {dynamic && <Text>(dynamic pricing w/ min. below)</Text>}
+            {dynamic && <Text>(dynamic pricing starting at)</Text>}
             <Text style={styles.currentTollAmount}>
               $ {roundCurrency(currentTollAmount.price)}
             </Text>
