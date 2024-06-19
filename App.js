@@ -18,12 +18,12 @@ import StateRouteNinetyOneSvg from "./components/StateRouteNinetyOneSvg";
 import westboundOCData from "./assets/data/westboundOC.json";
 import eastboundOCData from "./assets/data/eastboundOC.json";
 import holidaysOCData from "./assets/data/holidaysOC.json";
-import westboundI15Data from "./assets/data/westboundI15.json";
-import eastboundI15Data from "./assets/data/eastboundI15.json";
-import westboundMcKinleyData from "./assets/data/westboundMcKinley.json";
-import eastboundMcKinleyData from "./assets/data/eastboundMcKinley.json";
-import holidaysRMcKinleyData from "./assets/data/holidaysRMcKinley.json";
-import holidaysRI15Data from "./assets/data/holidaysRI15.json";
+// import westboundI15Data from "./assets/data/westboundI15.json";
+// import eastboundI15Data from "./assets/data/eastboundI15.json";
+// import westboundMcKinleyData from "./assets/data/westboundMcKinley.json";
+// import eastboundMcKinleyData from "./assets/data/eastboundMcKinley.json";
+// import holidaysRMcKinleyData from "./assets/data/holidaysRMcKinley.json";
+// import holidaysRI15Data from "./assets/data/holidaysRI15.json";
 import scheduledClosures from "./assets/data/scheduledClosures.json";
 
 const getHolidayData = (data, date) =>
@@ -114,7 +114,7 @@ export default function App() {
     {
       title: "SR-55 ⬅️ County Line",
       currentDate: currentDate,
-      data: getPriceData(westboundOCData, holidaysOCData, currentDate),
+      data: getPriceData(westboundOCData, holidaysOCData, currentDate, false),
       dynamic: false,
     },
     {

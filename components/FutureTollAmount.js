@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 10,
+    fontWeight: "bold",
   },
   label: {
     fontSize: 12,

@@ -62,8 +62,34 @@ export default function Card({ title, currentDate, data, dynamic }) {
         <Text style={styles.time}>{currentTollAmount.time}</Text>
         <View style={styles.currentTollAmountGroup}>
           <View style={styles.currentTollAmountContainer}>
-            <Text>Regular Lane:</Text>
-            {dynamic && <Text>(dynamic pricing starting at)</Text>}
+            {dynamic ? (
+              <Text>
+                Rate Starts At{" "}
+                <Popable
+                  animated={true}
+                  animationType="spring"
+                  content={
+                    <View
+                      style={{
+                        padding: 5,
+                        alignItems: "flex-start",
+                        justifyContent: "flex-start",
+                        color: "white",
+                      }}
+                    >
+                      Dynamically priced. The toll is higher when there is more
+                      traffic.
+                    </View>
+                  }
+                  position="top"
+                >
+                  <FontAwesome5 name="info-circle" color="#000000" size={13} />
+                </Popable>
+                :
+              </Text>
+            ) : (
+              <Text>Regular Lane:</Text>
+            )}
             <Text style={styles.currentTollAmount}>
               $ {roundCurrency(currentTollAmount.price)}
             </Text>
@@ -75,18 +101,19 @@ export default function Card({ title, currentDate, data, dynamic }) {
             <Text>
               HOV3+ Lane{" "}
               <Popable
+                animated={true}
+                animationType="spring"
                 content={
                   <View
                     style={{
-                      padding: 10,
+                      padding: 5,
                       alignItems: "flex-start",
                       justifyContent: "flex-start",
                       color: "white",
                     }}
                   >
-                    <Text>
-                      Carpools of 3+ with active FastTrak transponder required
-                    </Text>
+                    Carpools of 3+ or clean vehicle with active FastTrak
+                    transponder required.
                   </View>
                 }
                 position="top"
