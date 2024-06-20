@@ -122,7 +122,6 @@ export default function Card({ title, currentDate, data, dynamic }) {
               </Popable>
               :
             </Text>
-            {dynamic && <Text> </Text>}
             <Text style={styles.currentTollAmount}>
               {dynamic
                 ? "TBD"
