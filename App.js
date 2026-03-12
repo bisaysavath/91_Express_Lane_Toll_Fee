@@ -8,23 +8,18 @@ import Card from './components/Card';
 import StateRouteNinetyOneSvg from './components/StateRouteNinetyOneSvg';
 
 // data
-import westboundOCData from './assets/data/westboundOC.json';
-import eastboundOCData from './assets/data/eastboundOC.json';
-import holidaysOCData from './assets/data/holidaysOC.json';
-// import westboundI15Data from "./assets/data/westboundI15.json";
-// import eastboundI15Data from "./assets/data/eastboundI15.json";
-// import westboundMcKinleyData from "./assets/data/westboundMcKinley.json";
-// import eastboundMcKinleyData from "./assets/data/eastboundMcKinley.json";
-// import holidaysRMcKinleyData from "./assets/data/holidaysRMcKinley.json";
-// import holidaysRI15Data from "./assets/data/holidaysRI15.json";
-import scheduledClosures from './assets/data/scheduledClosures.json';
+import westboundOCData from "./assets/data/westboundOC.json";
+import eastboundOCData from "./assets/data/eastboundOC.json";
+import holidaysOCData from "./assets/data/holidaysOC.json";
+
+import scheduledClosures from "./assets/data/scheduledClosures.json";
 
 const getHolidayData = (data, date) => data.find((val) => new Date(val.date).toLocaleDateString() === date.toLocaleDateString());
 
 const getPriceData = (priceData, holidayPriceData, date, eastbound = false) => {
   const priceList = [];
   for (let i = 0; i < 4; i++) {
-    const newDate = new Date(date.toISOString());
+    const newDate = new Date(date.getTime());
     newDate.setHours(newDate.getHours() + i);
     const currentDay = newDate.getDay();
     const currentHour = newDate.getHours();
@@ -73,7 +68,7 @@ export default function App() {
   const [refreshing, setRefreshing] = useState(false);
 
   // check if this week will have a scheduled maintenance closure on Sunday
-  const isScheduledClosureSundayWeek = scheduledClosures.find((val) => {
+  const isScheduledClosureSundayWeek = scheduledClosures.some((val) => {
     const valTime = new Date(val).getTime();
     const timeDiff = valTime - currentDate.getTime();
     // 561600000ms is the diff between 0 AM Monday to 12 PM Sunday
@@ -88,14 +83,7 @@ export default function App() {
     }, 1200);
   };
 
-  const nextHourDate = new Date(currentDate.toISOString());
-  nextHourDate.setHours(nextHourDate.getHours() + 1);
 
-  const nextTwoHoursDate = new Date(currentDate.toISOString());
-  nextTwoHoursDate.setHours(nextTwoHoursDate.getHours() + 2);
-
-  const nextThreeHoursDate = new Date(currentDate.toISOString());
-  nextThreeHoursDate.setHours(nextThreeHoursDate.getHours() + 3);
 
   const data = [
     {
@@ -119,31 +107,31 @@ export default function App() {
     {
       title: 'County Line ➡️ McKinley St',
       currentDate: currentDate,
-      data: 2.15,
+      data: 2.20,
       dynamic: true,
     },
     {
       title: 'County Line ⬅️ I-15 North',
       currentDate: currentDate,
-      data: 2.2,
+      data: 2.25,
       dynamic: true,
     },
     {
       title: 'County Line ➡️ I-15 North',
       currentDate: currentDate,
-      data: 3.2,
+      data: 2.5,
       dynamic: true,
     },
     {
       title: 'County Line ⬅️ I-15 South',
       currentDate: currentDate,
-      data: 3.15,
+      data: 3.25,
       dynamic: true,
     },
     {
       title: 'County Line ➡️ I-15 South',
       currentDate: currentDate,
-      data: 2.45,
+      data: 3.3,
       dynamic: true,
     },
   ];
