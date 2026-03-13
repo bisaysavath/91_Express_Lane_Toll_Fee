@@ -10,7 +10,7 @@ export default function Card({ title, currentDate, data, dynamic }) {
 
   let targetWidth = 600;
   if (layout.width < 768) {
-    targetWidth = layout.width * 0.95;
+    targetWidth = layout.width * 0.95 - 40;
   }
 
   let currentTollAmount = {};
@@ -68,17 +68,12 @@ export default function Card({ title, currentDate, data, dynamic }) {
                 <Popable
                   animated={true}
                   animationType="spring"
+                  style={{ width: 170 }}
                   content={
-                    <View
-                      style={{
-                        padding: 5,
-                        alignItems: "flex-start",
-                        justifyContent: "flex-start",
-                        color: "white",
-                      }}
-                    >
-                      Dynamically priced. The toll is higher when there is more
-                      traffic.
+                    <View style={{ padding: 10 }}>
+                      <Text style={{ color: "white", fontSize: 13, lineHeight: 18, textAlign: "center" }}>
+                        Dynamically priced. The toll is higher when there is more traffic.
+                      </Text>
                     </View>
                   }
                   position="top"
@@ -103,17 +98,12 @@ export default function Card({ title, currentDate, data, dynamic }) {
               <Popable
                 animated={true}
                 animationType="spring"
+                style={{ width: 170 }}
                 content={
-                  <View
-                    style={{
-                      padding: 5,
-                      alignItems: "flex-start",
-                      justifyContent: "flex-start",
-                      color: "white",
-                    }}
-                  >
-                    Carpools of 3+ or clean vehicle with active FastTrak
-                    transponder required.
+                  <View style={{ padding: 10 }}>
+                    <Text style={{ color: "white", fontSize: 13, lineHeight: 18, textAlign: "center" }}>
+                      Carpools of 3+ or clean vehicle with active FastTrak transponder required.
+                    </Text>
                   </View>
                 }
                 position="top"
@@ -146,16 +136,16 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: 20,
     backgroundColor: "white",
-    elevation: 10,
-    boxShadow: "5px 10px 20px 0px rgba(46, 61, 73, 0.35)",
+    elevation: 4,
+    boxShadow: "0px 4px 16px 0px rgba(0, 0, 0, 0.08)",
     borderRadius: 20,
-    shadowColor: "black",
-    shadowRadius: 10,
+    shadowColor: "#000000",
+    shadowRadius: 12,
     shadowOffset: {
-      width: 5,
-      height: 10,
+      width: 0,
+      height: 4,
     },
-    shadowOpacity: 0.35,
+    shadowOpacity: 0.08,
     paddingVertical: 10,
     paddingHorizontal: 10,
   },
